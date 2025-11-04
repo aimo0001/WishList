@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"><body>
+<h1 th:text="${list.title}">Public list</h1>
+<ul>
+    <li th:each="w : ${wishes}">
+        <span th:text="${w.title}">wish</span>
+        <a th:if="${w.url}" th:href="${w.url}" target="_blank">link</a>
+    </li>
+</ul>
+<p><a href="/login">Login</a></p>
+</body></html>

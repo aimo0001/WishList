@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"><body>
+<h1>Your wishlists</h1>
 
-</body>
-</html>
+<ul>
+    <li th:each="wl : ${lists}">
+        <a th:href="@{|/wishlist/${wl.id}|}" th:text="${wl.title}">List</a>
+        <small> (<span th:text="${wl.slug}">slug</span>)</small>
+    </li>
+</ul>
+
+<h2>Create new list</h2>
+<form method="post" action="/wishlist/create">
+    <input name="title" placeholder="Title" required>
+    <label><input type="checkbox" name="isPublic"> Public</label>
+    <button type="submit">Create</button>
+</form>
+
+<p><a href="/logout">Logout</a></p>
+</body></html>
