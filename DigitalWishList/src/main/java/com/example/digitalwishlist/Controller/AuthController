@@ -1,0 +1,27 @@
+package com.example.digitalwishlist.Controller;
+
+import com.example.digitalwishlist.Service.UserService;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class AuthController {
+    private final UserService users;
+
+    public AuthController(UserService users) { this.users = users; }
+
+    @GetMapping("/login")
+    public String login() { return "login"; }
+
+    @GetMapping("/createUser")
+    public String regForm() { return "createUser"; }
+
+    @PostMapping("/createUser")
+    public String register(@RequestParam @Email String email,
+                           @RequestParam @NotBlank String password) {
+        users.register(email, password);
+        return "redirect:/login";
+    }
+}
