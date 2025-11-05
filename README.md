@@ -20,3 +20,5 @@ Dokumentation:
 ER diagram: docs/er-diagrams.md
 Klassediagram: docs/class-diagram.md
 Qodana rapport screenshot
+
+Link til Azure: https://digitalwishlist.azurewebsites.net/
