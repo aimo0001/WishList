@@ -11,9 +11,8 @@ public class Wishlist {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional=false, fetch = FetchType.LAZY)
-    @JoinColumn(name="owner_id")
-    private User owner;
+    @Column(nullable=false, name = "owner_name")
+    private String ownerName;
 
     @Column(nullable=false)
     private String title;
@@ -21,17 +20,17 @@ public class Wishlist {
     @Column(nullable=false, unique=true)
     private String slug;
 
-    @Column(nullable=false)
+    @Column(nullable=false, name = "public_list")
     private boolean publicList = false;
 
-    @Column(nullable=false)
+    @Column(nullable=false, name = "created_at")
     private Instant createdAt = Instant.now();
 
     @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wish> wishes = new ArrayList<>();
 
     public Long getId() { return id; }
-    public User getOwner() { return owner; }
+    public String getOwnerName() { return ownerName; }
     public String getTitle() { return title; }
     public String getSlug() { return slug; }
     public boolean isPublicList() { return publicList; }
@@ -39,7 +38,7 @@ public class Wishlist {
     public List<Wish> getWishes() { return wishes; }
 
     public void setId(Long id) { this.id = id; }
-    public void setOwner(User owner) { this.owner = owner; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
     public void setTitle(String title) { this.title = title; }
     public void setSlug(String slug) { this.slug = slug; }
     public void setPublicList(boolean publicList) { this.publicList = publicList; }

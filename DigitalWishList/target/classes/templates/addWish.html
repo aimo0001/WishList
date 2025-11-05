@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title th:text="${list.title}">Ønskeliste</title></head>
 <body>
+<h1 th:text="${list.title}">Ønskeliste</h1>
+<p>Ejer: <strong th:text="${list.ownerName}">owner</strong></p>
 
+<h2>Tilføj ønske</h2>
+<form th:action="@{|/wishlist/${list.id}/wish|}" method="post">
+    <input type="hidden" name="owner" th:value="${owner}">
+    <input type="text" name="title" placeholder="Ønskets titel" required>
+    <input type="url" name="url" placeholder="Link (valgfrit)">
+    <input type="number" step="0.01" name="price" placeholder="Pris (valgfrit)">
+    <input type="text" name="notes" placeholder="Noter (valgfrit)">
+    <button type="submit">Tilføj</button>
+</form>
+
+<h2>Ønsker</h2>
+<ul>
+    <li th:each="w : ${wishes}">
+        <strong th:text="${w.title}">titel</strong>
+        <a th:if="${w.url}" th:href="${w.url}">link</a>
+        <span th:if="${w.price != null}" th:text="${' – ' + w.price + ' kr.'}"></span>
+        <em th:if="${w.notes}" th:text="${' – ' + w.notes}"></em>
+    </li>
+</ul>
+
+<p><a th:href="@{|/wishlist?owner=${owner}|}">Tilbage til mine lister</a></p>
 </body>
 </html>

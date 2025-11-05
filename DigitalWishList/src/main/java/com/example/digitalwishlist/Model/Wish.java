@@ -20,7 +20,7 @@ public class Wish {
     private Double price;
     private String notes;
 
-    @Column(nullable=false)
+    @Column(nullable=false, name = "created_at")
     private Instant createdAt = Instant.now();
 
     public Long getId() { return id; }

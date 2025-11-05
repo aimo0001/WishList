@@ -1,13 +1,10 @@
 package com.example.digitalwishlist.Service;
 
-import com.example.digitalwishlist.Model.User;
 import com.example.digitalwishlist.Model.Wish;
 import com.example.digitalwishlist.Model.Wishlist;
-import com.example.digitalwishlist.Repository.UserRepository;
 import com.example.digitalwishlist.Repository.WishListRepository;
 import com.example.digitalwishlist.Repository.WishRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Normalizer;
 import java.util.List;
@@ -16,34 +13,32 @@ import java.util.Optional;
 
 @Service
 public class WishListService {
+
     private final WishListRepository wishlists;
     private final WishRepository wishes;
-    private final UserRepository users;
 
-    public WishListService(WishListRepository wishlists, WishRepository wishes, UserRepository users) {
-        this.wishlists = wishlists; this.wishes = wishes; this.users = users;
+    public WishListService(WishListRepository wishlists, WishRepository wishes) {
+        this.wishlists = wishlists;
+        this.wishes = wishes;
     }
 
-    public List<Wishlist> mine(String email) {
-        User owner = users.findByEmail(email).orElseThrow();
-        return wishlists.findAllByOwner(owner);
+    public List<Wishlist> mine(String ownerName) {
+        return wishlists.findAllByOwnerName(ownerName);
     }
 
-    @Transactional
-    public Wishlist create(String email, String title, boolean isPublic) {
-        User owner = users.findByEmail(email).orElseThrow();
+    public Wishlist create(String ownerName, String title, boolean isPublic) {
         String slug = uniqueSlug(title);
         Wishlist wl = new Wishlist();
-        wl.setOwner(owner);
+        wl.setOwnerName(ownerName);
         wl.setTitle(title);
         wl.setPublicList(isPublic);
         wl.setSlug(slug);
         return wishlists.save(wl);
     }
 
-    @Transactional
     public Wish addWish(Long wishlistId, String title, String url, Double price, String notes) {
-        Wishlist wl = wishlists.findById(wishlistId).orElseThrow();
+        Wishlist wl = wishlists.findById(wishlistId)
+                .orElseThrow(() -> new IllegalArgumentException("Wishlist not found: " + wishlistId));
         Wish w = new Wish();
         w.setWishlist(wl);
         w.setTitle(title);
@@ -59,14 +54,16 @@ public class WishListService {
 
     private String uniqueSlug(String title) {
         String base = slugify(title);
-        String candidate = base;
+        String cand = base;
         int i = 2;
-        while (wishlists.existsBySlug(candidate)) candidate = base + "-" + i++;
-        return candidate;
+        while (wishlists.existsBySlug(cand)) {
+            cand = base + "-" + i++;
+        }
+        return cand;
     }
 
     private static String slugify(String s) {
-        String n = Normalizer.normalize(s, Normalizer.Form.NFD)
+        String n = Normalizer.normalize(s == null ? "" : s, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", "")
                 .toLowerCase(Locale.ROOT)
                 .replaceAll("[^a-z0-9]+", "-")

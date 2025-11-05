@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title th:text="${list.title}">Offentlig liste</title></head>
+<body>
+<h1 th:text="${list.title}">Offentlig ønskeliste</h1>
+<p>Ejer: <strong th:text="${list.ownerName}">owner</strong></p>
+<ul>
+    <li th:each="w : ${wishes}">
+        <strong th:text="${w.title}">titel</strong>
+        <a th:if="${w.url}" th:href="${w.url}">link</a>
+        <span th:if="${w.price != null}" th:text="${' – ' + w.price + ' kr.'}"></span>
+        <em th:if="${w.notes}" th:text="${' – ' + w.notes}"></em>
+    </li>
+</ul>
+
+<p><a href="/wishlist">Mine lister</a></p>
+</body>
+</html>

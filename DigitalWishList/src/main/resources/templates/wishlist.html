@@ -1,20 +1,33 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"><body>
-<h1>Your wishlists</h1>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Ønskelister</title></head>
+<body>
+<h1>Digital ønskeseddel (MVP)</h1>
 
-<ul>
-    <li th:each="wl : ${lists}">
-        <a th:href="@{|/wishlist/${wl.id}|}" th:text="${wl.title}">List</a>
-        <small> (<span th:text="${wl.slug}">slug</span>)</small>
-    </li>
-</ul>
-
-<h2>Create new list</h2>
-<form method="post" action="/wishlist/create">
-    <input name="title" placeholder="Title" required>
-    <label><input type="checkbox" name="isPublic"> Public</label>
-    <button type="submit">Create</button>
+<form method="get" th:action="@{/wishlist}">
+    <input type="text" name="owner" placeholder="Dit navn" th:value="${owner}">
+    <button type="submit">Vis mine lister</button>
 </form>
 
-<p><a href="/logout">Logout</a></p>
-</body></html>
+<hr/>
+
+<h2>Opret ny ønskeliste</h2>
+<form th:action="@{/wishlist/create}" method="post">
+    <input type="text" name="owner" placeholder="Dit navn" required th:value="${owner}">
+    <input type="text" name="title" placeholder="Titel på ønskeliste" required>
+    <label><input type="checkbox" name="isPublic"> Offentlig</label>
+    <button type="submit">Opret</button>
+</form>
+
+<hr/>
+
+<h2 th:if="${owner}">Lister for <span th:text="${owner}">ejer</span></h2>
+<ul>
+    <li th:each="l : ${lists}">
+        <a th:href="@{|/wishlist/${l.id}?owner=${owner}|}" th:text="${l.title}">liste</a>
+        <span> – offentlig link: </span>
+        <a th:href="@{|/w/${l.slug}|}" th:text="${l.slug}">slug</a>
+    </li>
+</ul>
+</body>
+</html>

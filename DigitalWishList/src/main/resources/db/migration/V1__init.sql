@@ -1,25 +1,23 @@
-CREATE TABLE app_user (
-                          id BIGSERIAL PRIMARY KEY,
-                          email TEXT NOT NULL UNIQUE,
-                          password_hash TEXT NOT NULL,
-                          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE IF NOT EXISTS wishlist (
+                                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                        owner_name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    public_list BOOLEAN NOT NULL,
+    created_at TIMESTAMP(6) NOT NULL
+    );
 
-CREATE TABLE wishlist (
-                          id BIGSERIAL PRIMARY KEY,
-                          owner_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
-                          title TEXT NOT NULL,
-                          slug TEXT NOT NULL UNIQUE,
-                          public_list BOOLEAN NOT NULL DEFAULT FALSE,
-                          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE INDEX idx_wishlist_owner ON wishlist(owner_name);
 
-CREATE TABLE wish (
-                      id BIGSERIAL PRIMARY KEY,
-                      wishlist_id BIGINT NOT NULL REFERENCES wishlist(id) ON DELETE CASCADE,
-                      title TEXT NOT NULL,
-                      url TEXT,
-                      price NUMERIC(10,2),
-                      notes TEXT,
-                      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE IF NOT EXISTS wish (
+                                    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                    wishlist_id BIGINT NOT NULL,
+                                    title VARCHAR(255) NOT NULL,
+    url VARCHAR(1000),
+    price DOUBLE,
+    notes VARCHAR(1000),
+    created_at TIMESTAMP(6) NOT NULL,
+    CONSTRAINT fk_wish_wishlist FOREIGN KEY (wishlist_id) REFERENCES wishlist(id)
+    );
+
+CREATE INDEX idx_wish_wishlist ON wish(wishlist_id);
