@@ -16,10 +16,12 @@ public class WishListService {
 
     private final WishListRepository lists;
     private final WishRepository wishes;
+    private final WishListRepository wishListRepository;
 
-    public WishListService(WishListRepository lists, WishRepository wishes) {
+    public WishListService(WishListRepository lists, WishRepository wishes, WishListRepository wishListRepository) {
         this.lists = lists;
         this.wishes = wishes;
+        this.wishListRepository = wishListRepository;
     }
 
     public List<WishList> allPublic(){
@@ -79,6 +81,22 @@ public class WishListService {
                 .replaceAll("[^a-z0-9]+", "-")
                 .replaceAll("(^-|-$)", "");
         return n.isEmpty() ? "liste" : n;
+    }
+
+    public List<WishList> findAll() {
+        return wishListRepository.findAll();
+    }
+
+    public WishList findById(long id) {
+        return wishListRepository.findById(id).orElse(null);
+    }
+
+    public WishList save(WishList wishlist) {
+        return wishListRepository.save(wishlist);
+    }
+
+    public void delete(long id) {
+        wishListRepository.deleteById(id);
     }
 }
 
