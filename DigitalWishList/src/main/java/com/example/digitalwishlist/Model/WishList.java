@@ -7,23 +7,25 @@ import java.util.List;
 
 @Entity
 @Table(name = "wishlist")
-public class Wishlist {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class WishList {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false, name = "owner_name")
+    @Column(nullable = false, name = "owner_name")
     private String ownerName;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(nullable=false, unique=true)
+    @Column(nullable = false, unique = true)
     private String slug;
 
-    @Column(nullable=false, name = "public_list")
+    @Column(nullable = false, name = "public_list")
     private boolean publicList = false;
 
-    @Column(nullable=false, name = "created_at")
+    @Column(nullable = false, name = "created_at")
     private Instant createdAt = Instant.now();
 
     @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
