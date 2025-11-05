@@ -20,10 +20,11 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean package -DskipTests
+        working-directory: DigitalWishList
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: '${{ github.workspace }}/target/*.jar'
+          package: '${{ github.workspace }}/digitalwishlist/target/*.jar'
